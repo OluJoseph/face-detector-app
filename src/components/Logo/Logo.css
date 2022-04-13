@@ -1,0 +1,14 @@
+
+.logoTilt {
+    height: 100px;
+    width: 100px;
+    background: linear-gradient(45deg, rgb(173, 18, 114), rgb(32, 169, 114));
+}
+
+.logoTilt div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
