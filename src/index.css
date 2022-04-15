@@ -1,7 +1,20 @@
 body {
     margin: 0px;
     padding: 0px;
-    font-family: sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     background: linear-gradient(to right, rgb(173, 18, 114), 60%, rgb(32, 169, 114)) no-repeat;
     height: 100vh;
+}
+
+*:focus {
+    outline: none;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    cursor: pointer;
 }

@@ -1,0 +1,26 @@
+#form {
+    padding: 30px;
+    background-color: white;
+    width: 400px;
+}
+
+@media only screen and (max-width: 512px){ 
+    #form {
+        width: 100%;
+    }
+}
+
+.detect {
+    color: rgb(255, 255, 255);
+    font-size: 11px;
+    background: rgb(57, 31, 65);
+}
+
+.detect:hover {
+    opacity: 0.9;
+}
+
+.detect:active {
+    background: none;
+    color: rgb(57, 31, 65);
+}

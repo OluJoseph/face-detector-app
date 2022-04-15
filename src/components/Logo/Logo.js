@@ -2,13 +2,13 @@ import React from 'react';
 import 'tachyons';
 import "./Logo.css";
 import Tilt from 'react-parallax-tilt';
-import brain from "/Users/MSI/Documents/HELLO WORLD/face-detector-app/src/images/brain.png";
+import brain from "./brain.png";
 
 
 const Logo = () => {
     return (
         <div className='ml4 mt0'>
-            <Tilt className='br2 shadow-2 logoTilt'>
+            <Tilt className='br2 shadow-2 logoTilt' >
                 <div>
                     <img src={brain} alt={brain}/>
                 </div>
