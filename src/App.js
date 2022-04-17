@@ -87,7 +87,7 @@ class App extends Component {
     super(props);
     this.state = {
       urlInput: '',
-      box: {}
+      boxes: [{}]
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -102,33 +102,39 @@ class App extends Component {
 
   //calculate the border locations of the detector Box
   calculateFaceLocation = (data) => {
-    const loc = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const regionData = data.outputs[0].data.regions; //this assigns an array of face location objects with unique bounding boxes
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
 
-    return {
-      leftCol: loc.left_col * width,
-      rightCol: width - (loc.right_col * width),
-      topRow: loc.top_row * height,
-      bottomRow: height - (loc.bottom_row * height)
-    }
+    //using an array map function to calculate the location for each bounding box
+    const locations = regionData.map(data => {
+      const loc = (data.region_info.bounding_box)
+      return {
+        leftCol: loc.left_col * width,
+        rightCol: width - (loc.right_col * width),
+        topRow: loc.top_row * height,
+        bottomRow: height - (loc.bottom_row * height)
+      }
+    })
+
+    return locations;
   }
 
   //set the state of the box location to the calculated result
-  setBox = (box) => {
-    this.setState({box})
+  setBoxes = (boxes) => {
+    this.setState({boxes})
   }
 
   //function handles the data submitted
-  onButtonSubmit = (e) => {
+  onImageLoad = (e) => {
     e.preventDefault();
 
     app.models.predict(
         Clarifai.FACE_DETECT_MODEL, 
         this.state.urlInput)
-      .then(response => this.calculateFaceLocation(response))
-      .then(boxLocation => this.setBox(boxLocation))
+      .then(response => this.calculateFaceLocation(response)) //this function should return an array of bounding-box locations
+      .then(boxLocations => this.setBoxes(boxLocations)) //this function should update the "boxes" state to a new array for each unique image URL
       .catch(err => console.log(err))
   }
 
@@ -159,9 +165,9 @@ class App extends Component {
         <div className="inputOutput">
           <ImageLinkForm
           handleInputChange={this.handleInputChange} 
-          onButtonSubmit={this.onButtonSubmit}/>
+          />
 
-          {this.state.urlInput && <FaceDetector box={this.state.box} imageSrc={this.state.urlInput}/>}
+          {this.state.urlInput && <FaceDetector onImageLoad={this.onImageLoad} boxes={this.state.boxes} imageSrc={this.state.urlInput}/>}
         </div>
         
       </div>
