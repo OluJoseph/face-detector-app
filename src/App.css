@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
 }
 
@@ -13,4 +13,9 @@
     bottom: 0;
     right: 0;
     z-index: -1;
+    margin: 0px;
+}
+
+.app {
+    height: 100%;
 }
