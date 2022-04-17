@@ -1,10 +1,10 @@
 import React from 'react';
 import 'tachyons';
-
+import './Rank.css';
 
 const Rank = (props) => {
     return (
-        <div className='white mt5'>
+        <div className='white rank'>
             <div className='center'>
                 Hi! Tobi. Your current rank is...
             </div>
