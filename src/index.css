@@ -25,3 +25,7 @@ body {
 button {
     cursor: pointer;
 }
+
+input:-webkit-autofill{
+    background-color: blue;
+}

@@ -10,6 +10,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import FaceDetector from './components/FaceDetector/FaceDetector';
 import SignIn from './components/SignIn/SignIn';
+import Register from './components/Register/Register';
 
 
 //create API Object
@@ -59,7 +60,7 @@ const particlesOptions = {
         default: "bounce",
       },
       random: false,
-      speed: 3,
+      speed: 0.8,
       straight: false,
     },
     number: {
@@ -89,7 +90,7 @@ class App extends Component {
     this.state = {
       urlInput: '',
       boxes: [{}],
-      route: 'SignIn'
+      route: 'sign in'
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -163,27 +164,36 @@ class App extends Component {
           loaded={this.particlesLoaded}
           params={particlesOptions}
         />
+        {
+          (() => {
+            switch (this.state.route) {
+              case 'sign in' :
+                return <SignIn onRouteChange={this.onRouteChange}/>
+              case 'home' :
+                return (
+                  <div>
+                    <Navigation onRouteChange={this.onRouteChange}/>
 
-        {this.state.route === 'SignIn' 
-        ? 
-        <SignIn onRouteChange={this.onRouteChange}/>
-        :
-        <div>
+                    <Rank />
 
-          <Navigation onRouteChange={this.onRouteChange}/>
+                    <div className="inputOutput">
+                      <ImageLinkForm
+                      handleInputChange={this.handleInputChange} 
+                      />
 
-          <Rank />
+                      {this.state.urlInput && <FaceDetector onImageLoad={this.onImageLoad} boxes={this.state.boxes} imageSrc={this.state.urlInput}/>}
+                    </div>
 
-          <div className="inputOutput">
-            <ImageLinkForm
-            handleInputChange={this.handleInputChange} 
-            />
-
-            {this.state.urlInput && <FaceDetector onImageLoad={this.onImageLoad} boxes={this.state.boxes} imageSrc={this.state.urlInput}/>}
-          </div>
-
-        </div>}
-        
+                  </div>
+                )
+              case 'register':
+                return (
+                  <Register onRouteChange={this.onRouteChange}/>
+                )
+              
+            }
+          })()
+        }        
       </div>
     )
   }

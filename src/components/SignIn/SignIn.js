@@ -20,10 +20,10 @@ const SignIn = (props) => {
 
                 </fieldset>
                 <div className="center">
-                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f7 dib" onClick={() => props.onRouteChange('SignOut')} type="submit" value="Sign in" />
+                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f7 dib" onClick={() => props.onRouteChange('home')} type="submit" value="Sign in" />
                 </div>
                 <div className="lh-copy mt3 center">
-                    <a href="#0" className="f7 link dim black db">Sign up</a>
+                    <a href="#0" className="f7 link dim black db" onClick={() => props.onRouteChange('register')}>Register</a>
                 </div>
             </form>
         </main>
