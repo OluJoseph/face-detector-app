@@ -9,6 +9,7 @@ import Navigation from './components/Navigation/Navigation';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import FaceDetector from './components/FaceDetector/FaceDetector';
+import SignIn from './components/SignIn/SignIn';
 
 
 //create API Object
@@ -45,7 +46,7 @@ const particlesOptions = {
       color: "#ffffff",
       distance: 140,
       enable: true,
-      opacity: 0.5,
+      opacity: 0.08,
       width: 1,
     },
     collisions: {
@@ -87,7 +88,8 @@ class App extends Component {
     super(props);
     this.state = {
       urlInput: '',
-      boxes: [{}]
+      boxes: [{}],
+      route: 'SignIn'
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -138,6 +140,10 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  onRouteChange = (route) => {
+    this.setState({route})
+  }
+
   particlesInit = async (main) => {
     await loadFull(main);
     return;
@@ -158,17 +164,25 @@ class App extends Component {
           params={particlesOptions}
         />
 
-        <Navigation />
+        {this.state.route === 'SignIn' 
+        ? 
+        <SignIn onRouteChange={this.onRouteChange}/>
+        :
+        <div>
 
-        <Rank />
+          <Navigation onRouteChange={this.onRouteChange}/>
 
-        <div className="inputOutput">
-          <ImageLinkForm
-          handleInputChange={this.handleInputChange} 
-          />
+          <Rank />
 
-          {this.state.urlInput && <FaceDetector onImageLoad={this.onImageLoad} boxes={this.state.boxes} imageSrc={this.state.urlInput}/>}
-        </div>
+          <div className="inputOutput">
+            <ImageLinkForm
+            handleInputChange={this.handleInputChange} 
+            />
+
+            {this.state.urlInput && <FaceDetector onImageLoad={this.onImageLoad} boxes={this.state.boxes} imageSrc={this.state.urlInput}/>}
+          </div>
+
+        </div>}
         
       </div>
     )
