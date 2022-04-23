@@ -6,10 +6,10 @@ const Rank = (props) => {
     return (
         <div className='white rank'>
             <div className='center'>
-                Hi! Tobi. Your current rank is...
+                Hi! {props.name}. Your current entry count is...
             </div>
             <div className='center f3'>
-                #5
+                {props.entries}
             </div>
         </div>
     )
