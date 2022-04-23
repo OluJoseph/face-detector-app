@@ -90,12 +90,14 @@ class App extends Component {
     this.state = {
       urlInput: '',
       boxes: [{}],
-      route: 'sign in'
+      route: 'sign in',
+      user: {}
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.particlesInit = this.particlesInit.bind(this);
     this.particlesLoaded = this.particlesLoaded.bind(this);
+    this.getUser = this.getUser.bind(this);
   }
 
   //function to set the state of the current image url on input change
@@ -136,13 +138,35 @@ class App extends Component {
     app.models.predict(
         Clarifai.FACE_DETECT_MODEL, 
         this.state.urlInput)
-      .then(response => this.calculateFaceLocation(response)) //this function should return an array of bounding-box locations
+      .then(response => {
+        if(response){
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+          .then(resp => resp.json())
+          .then(data => {
+            this.setState({user: data})
+          })
+        }
+        return this.calculateFaceLocation(response)
+      }) //this function should return an array of bounding-box locations
       .then(boxLocations => this.setBoxes(boxLocations)) //this function should update the "boxes" state to a new array for each unique image URL
-      .catch(err => console.log(err))
+      .catch(err => console.log(err, 'no boxes'))
   }
 
   onRouteChange = (route) => {
     this.setState({route})
+  }
+
+  getUser = (user) => {
+    this.setState({
+      user: user,
+      urlInput: ''
+    })
   }
 
   particlesInit = async (main) => {
@@ -155,6 +179,7 @@ class App extends Component {
   };
 
   render () {
+    const {name, email, entries, joined} = this.state.user;
     return (
       <div className="app pb5">
         <Particles
@@ -168,13 +193,13 @@ class App extends Component {
           (() => {
             switch (this.state.route) {
               case 'sign in' :
-                return <SignIn onRouteChange={this.onRouteChange}/>
+                return <SignIn onRouteChange={this.onRouteChange} getUser={this.getUser}/>
               case 'home' :
                 return (
                   <div>
                     <Navigation onRouteChange={this.onRouteChange}/>
 
-                    <Rank />
+                    <Rank name={name} entries={entries}/>
 
                     <div className="inputOutput">
                       <ImageLinkForm
