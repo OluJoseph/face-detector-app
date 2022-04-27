@@ -1,7 +1,5 @@
 import React from 'react';
 import 'tachyons';
-// import './SignIn.css';
-
 
 class SignIn extends React.Component {
     constructor (props) {
@@ -24,7 +22,7 @@ class SignIn extends React.Component {
         this.setState({signInPassword: e.target.value})
     }
 
-    reloadSignIn = () => {
+    reloadSignIn = () => { //TRYING TO REMEMBER WHY I DID THIS
         this.setState({singInSuccess: ''})
     }
 
