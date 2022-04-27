@@ -94,6 +94,7 @@ class App extends Component {
       user: {}
     };
 
+    //BINDS THIS TO THE CLASS SO CALLBACKS FUNCTION PROPERLY
     this.handleInputChange = this.handleInputChange.bind(this);
     this.particlesInit = this.particlesInit.bind(this);
     this.particlesLoaded = this.particlesLoaded.bind(this);
@@ -124,7 +125,7 @@ class App extends Component {
       }
     })
 
-    return locations;
+    return locations; //RETURNS ALL LOCATION BOX OBJECT AS AN ARRAY
   }
 
   //set the state of the box location to the calculated result
@@ -151,7 +152,7 @@ class App extends Component {
           })
           .then(resp => resp.json())
           .then(data => {
-            this.setState({user: data})
+            this.setState({user: data}) //UPDATES THE WHOLE USER OBJECT BUT ONLY AFFECTS THE ENTRIES (ITS HOW REACT WORKS)
           })
         }
         return this.calculateFaceLocation(response)
@@ -167,8 +168,8 @@ class App extends Component {
   getUser = (user) => {
     this.setState({
       user: user,
-      urlInput: ''
-    })
+      urlInput: '' //THE IMAGE IS CLEARED EVERYTIME A NEW USER SIGNS IN TO PREVENT SHOWING INITIAL STATES
+    })//COULD'VE ALSO CLEARED THE IMAGE WHEN A USER SIGNS OUT, STILL WORKS
   }
 
   particlesInit = async (main) => {
@@ -193,7 +194,7 @@ class App extends Component {
         />
         {
           (() => {
-            switch (this.state.route) {
+            switch (this.state.route) { //RETURNS DIFFERENT COMPONENTS BASED ON CURRENT ROUTE CHANGE
               case 'sign in' :
                 return <SignIn onRouteChange={this.onRouteChange} getUser={this.getUser}/>
               case 'home' :
