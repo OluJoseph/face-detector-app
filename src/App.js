@@ -89,7 +89,7 @@ class App extends Component {
     super(props);
     this.state = {
       urlInput: '',
-      boxes: [{}],
+      boxes: [],
       route: 'sign in',
       user: {}
     };
@@ -103,6 +103,7 @@ class App extends Component {
   //function to set the state of the current image url on input change
   handleInputChange = (e) => {
     this.setState({urlInput: e.target.value})
+    this.setBoxes([]);
   }
 
   //calculate the border locations of the detector Box
@@ -135,7 +136,8 @@ class App extends Component {
   onImageLoad = (e) => {
     e.preventDefault();
 
-    app.models.predict(
+    app.models
+      .predict(
         Clarifai.FACE_DETECT_MODEL, 
         this.state.urlInput)
       .then(response => {
