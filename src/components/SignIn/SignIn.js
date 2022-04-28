@@ -7,7 +7,8 @@ class SignIn extends React.Component {
         this.state = {
             signInEmail : '',
             signInPassword: '',
-            singInSuccess: ''
+            singInSuccess: '',
+            errorMessage: ''
         }
 
         this.onEmailChange = this.onEmailChange.bind(this);
@@ -29,7 +30,7 @@ class SignIn extends React.Component {
     onSubmitSignIn = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3000/signin', {
+        fetch('https://serene-beyond-02376.herokuapp.com/signin', {
             method: 'post',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -39,17 +40,22 @@ class SignIn extends React.Component {
         })
         .then(resp => resp.json())
         .then(data => {
-            if (data.signIn === 'success') {
+            if (data.signInMessage === 'success') {
                 this.setState({singInSuccess: true})
                 this.props.getUser(data.user)
                 this.props.onRouteChange('home');
             }else{
                 this.setState({singInSuccess: 'noSuccess'})
+                this.setState({errorMessage: data})
             }
+        })
+        .catch(err => {
+            console.log("error fetching data")
         })        
     }
 
     render () {
+        const {errorMessage} = this.state;
         return (
             <main className="pa4 black-80 center pt6 measure" >
                 <form className="measure shadow-4 pa4 " onLoad={this.reloadSignIn}>
@@ -76,7 +82,7 @@ class SignIn extends React.Component {
                             />
                             
                         </div>
-                        {this.state.singInSuccess === 'noSuccess' && <span className='red f7 center'>username or password invaild</span>}
+                        {this.state.singInSuccess === 'noSuccess' && <span className='red f7 center'>{errorMessage}</span>}
     
                     </fieldset>
                     <div className="center">

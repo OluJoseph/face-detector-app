@@ -2,7 +2,7 @@
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import React, {Component} from "react";
-import Clarifai from 'clarifai';
+
 //components
 import './App.css';
 import Navigation from './components/Navigation/Navigation';
@@ -13,10 +13,6 @@ import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register';
 
 
-//create API Object
-const app = new Clarifai.App({
-  apiKey: '1332d555d77c412fa68876989de7ea02'
-})
 
 //options to configure the particles.js behaviour
 const particlesOptions = {
@@ -137,13 +133,17 @@ class App extends Component {
   onImageLoad = (e) => {
     e.preventDefault();
 
-    app.models
-      .predict(
-        Clarifai.FACE_DETECT_MODEL, 
-        this.state.urlInput)
+      fetch('https://serene-beyond-02376.herokuapp.com/imageurl', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          input: this.state.urlInput
+        })
+      })
+      .then(response => response.json())
       .then(response => {
         if(response){
-          fetch('http://localhost:3000/image', {
+          fetch('https://serene-beyond-02376.herokuapp.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
