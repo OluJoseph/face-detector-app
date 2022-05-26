@@ -28,34 +28,44 @@ class SignIn extends React.Component {
     this.setState({ singInSuccess: "" });
   };
 
+  displayErrorMessage = (data) => {
+    this.setState({ singInSuccess: "noSuccess" });
+    this.setState({ errorMessage: data });
+    setTimeout(() => {
+      this.setState({ errorMessage: null });
+    }, 3000);
+  };
+
   onSubmitSignIn = (e) => {
     e.preventDefault();
+    const regEx =
+      /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-    fetch("https://serene-beyond-02376.herokuapp.com/signin", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: this.state.signInEmail,
-        password: this.state.signInPassword,
-      }),
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.signInMessage === "success") {
-          this.setState({ singInSuccess: true });
-          this.props.getUser(data.user);
-          this.props.onRouteChange("home");
-        } else {
-          this.setState({ singInSuccess: "noSuccess" });
-          this.setState({ errorMessage: data });
-          setTimeout(() => {
-            this.setState({errorMessage: null});
-          }, 3000);
-        }
+    if (regEx.test(this.state.signInEmail)) {
+      fetch("https://serene-beyond-02376.herokuapp.com/signin", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: this.state.signInEmail,
+          password: this.state.signInPassword,
+        }),
       })
-      .catch((err) => {
-        console.log("error fetching data");
-      });
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (data.signInMessage === "success") {
+            this.setState({ singInSuccess: true });
+            this.props.getUser(data.user);
+            this.props.onRouteChange("home");
+          } else {
+            this.displayErrorMessage(data);
+          }
+        })
+        .catch((err) => {
+          console.log("error fetching data");
+        });
+    } else {
+      this.displayErrorMessage("Invalid Email");
+    }
   };
 
   render() {

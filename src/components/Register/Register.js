@@ -31,29 +31,39 @@ class Register extends React.Component {
   onSubmitRegister = (e) => {
     e.preventDefault();
 
-    fetch("https://serene-beyond-02376.herokuapp.com/register", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-      }),
-    })
-      .then((resp) => resp.json())
-      .then((result) => {
-        if (result === "successful") {
-          this.setState({ registerSuccess: result });
-          setTimeout(() => {
-            this.props.onRouteChange("sign in");
-          }, 1500);
-        } else {
-          this.setState({ registerSuccess: result });
-          setTimeout(() => {
-            this.setState({ registerSuccess: null });
-          }, 3000);
-        }
-      });
+    const regEx =
+      /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (regEx.test(this.state.email)) {
+      fetch("https://serene-beyond-02376.herokuapp.com/register", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: this.state.name,
+          email: this.state.email,
+          password: this.state.password,
+        }),
+      })
+        .then((resp) => resp.json())
+        .then((result) => {
+          if (result === "successful") {
+            this.setState({ registerSuccess: result });
+            setTimeout(() => {
+              this.props.onRouteChange("sign in");
+            }, 1500);
+          } else {
+            this.setState({ registerSuccess: result });
+            setTimeout(() => {
+              this.setState({ registerSuccess: null });
+            }, 3000);
+          }
+        });
+    } else {
+      this.setState({ registerSuccess: "Invalid Email" });
+      setTimeout(() => {
+        this.setState({ registerSuccess: null });
+      }, 3000);
+    }
   };
 
   render() {
